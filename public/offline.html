@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f0e6">
+<title>Цитатник</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: #f6f0e6; color: #2a2320;
+         font: 16px/1.6 ui-sans-serif, system-ui, sans-serif; padding: 24px; box-sizing: border-box; }
+  main { max-width: 26rem; text-align: center; }
+  h1 { font: italic 500 2.25rem/1.15 Georgia, "Times New Roman", serif; margin: 0 0 1rem; }
+  p { margin: .25rem 0; color: #6b5d53; }
+  hr { width: 3rem; border: 0; border-top: 1px solid #dccfbd; margin: 1.5rem auto; }
+  button { margin-top: 1.5rem; font: 600 .875rem/1 ui-sans-serif, system-ui, sans-serif; background: #7a2e3a;
+           color: #fbf8f2; border: 0; border-radius: 2px; padding: .9rem 1.4rem; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Книга ждёт сети</h1>
+  <p>Нет подключения к интернету. Ваши воспоминания в безопасности — откройте книгу снова, когда появится сеть.</p>
+  <hr>
+  <p lang="en">You're offline. Your memories are safe — open the book again once you're connected.</p>
+  <p lang="tr">Çevrimdışısın. Anıların güvende — bağlantı gelince defteri yeniden aç.</p>
+  <button type="button" onclick="location.reload()">Обновить · Retry · Yenile</button>
+</main>
+</body>
+</html>

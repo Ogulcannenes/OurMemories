@@ -1,0 +1,269 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark mode follows a class on <html> (set before paint from the saved choice or the OS). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  ADELYA design tokens — "our little universe of memories".
+  Paper, ink and one wine accent. Hairlines instead of shadows.
+*/
+
+@theme inline {
+  /* DM Sans has no Cyrillic: Manrope (cyrillic subset only) fills those glyphs. */
+  --font-sans: var(--font-dm-sans), var(--font-cyrillic), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-heading: var(--font-display);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* journal-specific names */
+  --color-paper: var(--background);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--foreground);
+  --color-ink-soft: var(--muted-foreground);
+  --color-rule: var(--border);
+  --color-wine: var(--primary);
+  --color-rose: var(--rose);
+  --color-rose-wash: var(--rose-wash);
+  --color-book-cloth: var(--book-cloth);
+  --color-book-edge: var(--book-edge);
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: var(--radius);
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
+  --radius-4xl: 12px;
+
+  --ease-page: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: light;
+
+  /* ADELYA brand palette (contrast checked: every text pair ≥ 5:1) */
+  --background: #f8f5ef;        /* ivory */
+  --paper-deep: #efe8dd;        /* pressed paper, secondary surfaces */
+  --foreground: #40342f;        /* dark brown ink — 11:1 on ivory */
+  --card: #fdfbf7;              /* a fresh page */
+  --card-foreground: #40342f;
+  --popover: #fdfbf7;
+  --popover-foreground: #40342f;
+  --primary: #754653;           /* burgundy — the only strong accent, 7:1 */
+  --primary-foreground: #f8f5ef;
+  --secondary: #efe8dd;
+  --secondary-foreground: #40342f;
+  --muted: #efe8dd;
+  --muted-foreground: #6e5f58;  /* 5.6:1 on ivory */
+  --accent: #e9d5d2;            /* dusty rose */
+  --accent-foreground: #754653;
+  --destructive: #8a3b3b;      /* muted brick, in family with burgundy — 7:1 on ivory */
+  --border: #e0d6c9;            /* hairline rule */
+  --input: #d3c6b6;
+  --ring: #754653;
+  --rose: #c9a4a0;              /* dusty rose, deeper — decorative only */
+  --rose-wash: #e9d5d2;         /* dusty rose */
+  --book-cloth: #754653;        /* cover cloth */
+  --book-edge: #e7ddcf;         /* page block edge */
+  --book-edge-2: #efe7db;
+  --book-edge-3: #ebe2d4;
+  --destructive-foreground: #ffffff;
+  --page-top: #fdfbf7;          /* book paper gradient */
+  --page-bottom: #fbf8f2;
+  --page-blank: #f6f1e8;
+  --polaroid: #ffffff;          /* photo print border */
+  --polaroid-caption: #6e5f58;
+  --tape: rgba(233, 213, 210, 0.75);
+  --shadow-ink: 64 52 47;
+
+  --radius: 4px;
+}
+
+/*
+  Night: reading by lamplight. Warm umber paper, ivory ink, the burgundy lifted to a
+  dusty rose so it stays legible (every text pair still >= 5:1). The cover cloth stays burgundy.
+*/
+.dark {
+  color-scheme: dark;
+
+  --background: #1b1613;
+  --paper-deep: #262019;
+  --foreground: #ede4d8;        /* 14:1 */
+  --card: #231d19;
+  --card-foreground: #ede4d8;
+  --popover: #2a231e;
+  --popover-foreground: #ede4d8;
+  --primary: #d6a5b0;           /* lifted burgundy - 8:1 on night paper */
+  --primary-foreground: #2a1b20;
+  --secondary: #2c251f;
+  --secondary-foreground: #ede4d8;
+  --muted: #2c251f;
+  --muted-foreground: #b2a397;  /* 7:1 */
+  --accent: #3b2a2f;
+  --accent-foreground: #ecc8d0;
+  --destructive: #e3928a;       /* 7:1 */
+  --destructive-foreground: #2a1513;
+  --border: #3a302a;
+  --input: #4a3e36;
+  --ring: #d6a5b0;
+  --rose: #8f6c6e;
+  --rose-wash: #3b2a2f;
+  --book-cloth: #5e3440;
+  --book-edge: #3a3029;
+  --book-edge-2: #2f2721;
+  --book-edge-3: #342b25;
+  --page-top: #2b241f;
+  --page-bottom: #27201b;
+  --page-blank: #231d18;
+  --polaroid: #ece4d6;          /* prints stay light, slightly dimmed */
+  --polaroid-caption: #5c4f49;  /* 5.6:1 on the dimmed print */
+  --tape: rgba(214, 165, 176, 0.45);
+  --shadow-ink: 0 0 0;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* faint paper grain */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .2 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection {
+    background: var(--rose-wash);
+    color: var(--accent-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Small caps label: dates, categories, meta. */
+  .eyebrow {
+    @apply text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-soft uppercase;
+  }
+
+  /* A quote set in the display face. */
+  .quote {
+    @apply font-display text-ink italic;
+    text-wrap: pretty;
+  }
+
+  /* Hairline fields — the form reads like a page, not a control panel. */
+  .field {
+    @apply w-full rounded-sm border border-input bg-card/70 px-3.5 py-3 text-[0.9375rem] text-ink transition-colors placeholder:text-ink-soft;
+    @apply focus:border-wine focus:bg-card focus:outline-none;
+    @apply aria-invalid:border-destructive;
+  }
+
+  .page {
+    @apply mx-auto w-full max-w-5xl px-5 sm:px-8;
+  }
+
+  /* ── Book ─────────────────────────────────────────── */
+
+  /* A bookmark ribbon with a V-notch at the end. */
+  .ribbon {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 7px), 0 100%);
+  }
+
+  /* Paper: warm fibre grain + faint deckle towards the outer edge. */
+  .book-paper {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .37 0 0 0 0 .3 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+      linear-gradient(to bottom, var(--page-top), var(--page-bottom));
+  }
+
+  /* Book-cloth: a fine linen weave over the burgundy board. */
+  .cover-cloth {
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.025) 0 1px, transparent 1px 3px),
+      radial-gradient(120% 90% at 30% 20%, rgba(255, 255, 255, 0.1), transparent 60%),
+      linear-gradient(to right, rgba(0, 0, 0, 0.22), transparent 9%);
+  }
+
+  /* The stacked page block visible under the open book. */
+  .book-block {
+    box-shadow:
+      0 1px 0 var(--book-edge),
+      0 2px 0 var(--book-edge-2),
+      0 3px 0 var(--book-edge),
+      0 4px 0 var(--book-edge-3),
+      0 24px 40px -18px rgb(var(--shadow-ink) / 0.45),
+      0 8px 14px -10px rgb(var(--shadow-ink) / 0.3);
+  }
+
+  /* A printed photo: its white border stays light in both themes. */
+  .polaroid {
+    background-color: var(--polaroid);
+  }
+  .polaroid-caption {
+    color: var(--polaroid-caption);
+  }
+
+  .taped-photo::before,
+  .taped-photo::after {
+    content: "";
+    position: absolute;
+    width: 34%;
+    height: 9%;
+    min-height: 10px;
+    background: var(--tape);
+    box-shadow: 0 1px 2px rgba(64, 52, 47, 0.12);
+  }
+  .taped-photo::before {
+    top: -4%;
+    left: -8%;
+    transform: rotate(-32deg);
+  }
+  .taped-photo::after {
+    top: -4%;
+    right: -8%;
+    transform: rotate(32deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
