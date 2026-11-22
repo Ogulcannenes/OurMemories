@@ -47,6 +47,15 @@ export const tr: Dictionary = {
     checkEmail: "Neredeyse bitti — hesabını onaylamak için e-postana gönderdiğimiz bağlantıyı aç.",
     confirmFailed: "Onay bağlantısı geçersiz veya süresi dolmuş.",
     rateLimited: "Çok fazla deneme. Bir dakika bekleyip tekrar dene.",
+    forgot: "Şifreni mi unuttun?",
+    forgotTitle: "Şifre sıfırlama",
+    forgotHint: "E-postanı yaz; yeni şifre belirlemen için bir bağlantı gönderelim.",
+    sendReset: "Bağlantıyı gönder",
+    resetSent: "Bu e-postayla bir hesap varsa sıfırlama bağlantısı yolda.",
+    newPasswordTitle: "Yeni şifreni belirle",
+    newPassword: "Yeni şifre",
+    savePassword: "Şifreyi kaydet",
+    resetExpired: "Bu bağlantı geçersiz ya da süresi dolmuş. Yenisini iste.",
   },
   onboarding: {
     title: "Her kitabın iki yazarı vardır",
@@ -158,6 +167,7 @@ export const tr: Dictionary = {
   },
   memory: {
     favoriteToggle: "Favori",
+    favoriteFailed: "Kaydedilemedi. Tekrar dene.",
     writtenBy: "{name} yazdı",
     favorite: "Favorilere ekle",
     unfavorite: "Favorilerden çıkar",

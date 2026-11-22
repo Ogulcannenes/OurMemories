@@ -231,6 +231,8 @@ export function MemoryForm({
   return (
     <form ref={formRef} onSubmit={onSubmit} onInput={onFormInput} noValidate className="space-y-9">
       <input type="hidden" name="id" value={initial?.id ?? ""} />
+      {/* The photos this form was opened with: the server only removes photos from this set. */}
+      {initial?.photos.map((p) => <input key={p.path} type="hidden" name="shown_photos" value={p.path} />)}
 
       {/* 1 — the quote is the point: first, largest, focused. */}
       <div>
@@ -307,7 +309,7 @@ export function MemoryForm({
                 defaultChecked={(initial?.categoryId ?? "") === c.id}
                 className="peer sr-only"
               />
-              <span className="inline-flex min-h-10 items-center rounded-sm border border-input px-3.5 text-[0.8125rem] font-medium text-ink-soft transition-colors peer-checked:border-wine peer-checked:bg-wine peer-checked:text-primary-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-wine/40 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-paper hover:border-ink/40 hover:text-ink peer-checked:hover:text-primary-foreground">
+              <span className="inline-flex min-h-10 items-center rounded-sm border border-input px-3.5 text-[0.8125rem] font-medium text-ink-soft transition-colors peer-checked:border-button peer-checked:bg-button peer-checked:text-button-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-wine/40 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-paper hover:border-ink/40 hover:text-ink peer-checked:hover:text-button-foreground">
                 {c.label}
               </span>
             </label>

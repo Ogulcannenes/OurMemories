@@ -35,6 +35,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  /* Filled buttons: burgundy by day, champagne beige by night. */
+  --color-button: var(--button);
+  --color-button-foreground: var(--button-foreground);
 
   /* journal-specific names */
   --color-paper: var(--background);
@@ -63,37 +66,39 @@
   color-scheme: light;
 
   /* ADELYA brand palette (contrast checked: every text pair ≥ 5:1) */
-  --background: #f8f5ef;        /* ivory */
-  --paper-deep: #efe8dd;        /* pressed paper, secondary surfaces */
-  --foreground: #40342f;        /* dark brown ink — 11:1 on ivory */
-  --card: #fdfbf7;              /* a fresh page */
-  --card-foreground: #40342f;
-  --popover: #fdfbf7;
-  --popover-foreground: #40342f;
-  --primary: #754653;           /* burgundy — the only strong accent, 7:1 */
+  --background: #e0d8c9;        /* dimmed parchment — soft on the eyes */
+  --paper-deep: #d5cab7;        /* pressed paper, secondary surfaces */
+  --foreground: #3b302b;        /* dark brown ink — 9:1 on parchment */
+  --card: #e9e2d5;              /* a page, softly toned */
+  --card-foreground: #3b302b;
+  --popover: #e9e2d5;
+  --popover-foreground: #3b302b;
+  --primary: #6c3f4b;           /* burgundy — the only strong accent, 6:1 */
   --primary-foreground: #f8f5ef;
-  --secondary: #efe8dd;
-  --secondary-foreground: #40342f;
-  --muted: #efe8dd;
-  --muted-foreground: #6e5f58;  /* 5.6:1 on ivory */
+  --button: #6c3f4b;
+  --button-foreground: #f8f5ef;
+  --secondary: #d5cab7;
+  --secondary-foreground: #3b302b;
+  --muted: #d5cab7;
+  --muted-foreground: #594a43;  /* 5.5:1 on parchment */
   --accent: #e9d5d2;            /* dusty rose */
-  --accent-foreground: #754653;
+  --accent-foreground: #6c3f4b;
   --destructive: #8a3b3b;      /* muted brick, in family with burgundy — 7:1 on ivory */
-  --border: #e0d6c9;            /* hairline rule */
-  --input: #d3c6b6;
-  --ring: #754653;
+  --border: #c9bba7;            /* hairline rule */
+  --input: #b6a690;
+  --ring: #6c3f4b;
   --rose: #c9a4a0;              /* dusty rose, deeper — decorative only */
   --rose-wash: #e9d5d2;         /* dusty rose */
   --book-cloth: #754653;        /* cover cloth */
-  --book-edge: #e7ddcf;         /* page block edge */
-  --book-edge-2: #efe7db;
-  --book-edge-3: #ebe2d4;
+  --book-edge: #d0c3ae;         /* page block edge */
+  --book-edge-2: #d9cdba;
+  --book-edge-3: #d4c8b4;
   --destructive-foreground: #ffffff;
-  --page-top: #fdfbf7;          /* book paper gradient */
-  --page-bottom: #fbf8f2;
-  --page-blank: #f6f1e8;
-  --polaroid: #ffffff;          /* photo print border */
-  --polaroid-caption: #6e5f58;
+  --page-top: #eae3d6;          /* book paper gradient */
+  --page-bottom: #e4dccd;
+  --page-blank: #ddd4c4;
+  --polaroid: #f1ece2;          /* photo print border */
+  --polaroid-caption: #594a43;
   --tape: rgba(233, 213, 210, 0.75);
   --shadow-ink: 64 52 47;
 
@@ -116,6 +121,8 @@
   --popover-foreground: #ede4d8;
   --primary: #d6a5b0;           /* lifted burgundy - 8:1 on night paper */
   --primary-foreground: #2a1b20;
+  --button: #d8c4a4;            /* champagne beige — softer than rose on night paper */
+  --button-foreground: #2a2118;
   --secondary: #2c251f;
   --secondary-foreground: #ede4d8;
   --muted: #2c251f;
@@ -133,8 +140,8 @@
   --book-edge: #3a3029;
   --book-edge-2: #2f2721;
   --book-edge-3: #342b25;
-  --page-top: #2b241f;
-  --page-bottom: #27201b;
+  --page-top: #31291f;          /* warm sepia night paper, not a dark card */
+  --page-bottom: #2b2319;
   --page-blank: #231d18;
   --polaroid: #ece4d6;          /* prints stay light, slightly dimmed */
   --polaroid-caption: #5c4f49;  /* 5.6:1 on the dimmed print */
@@ -173,7 +180,7 @@
 @layer components {
   /* Small caps label: dates, categories, meta. */
   .eyebrow {
-    @apply text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-soft uppercase;
+    @apply text-[0.6875rem] font-semibold tracking-[0.18em] text-ink-soft uppercase;
   }
 
   /* A quote set in the display face. */
@@ -185,7 +192,7 @@
   /* Hairline fields — the form reads like a page, not a control panel. */
   .field {
     @apply w-full rounded-sm border border-input bg-card/70 px-3.5 py-3 text-[0.9375rem] text-ink transition-colors placeholder:text-ink-soft;
-    @apply focus:border-wine focus:bg-card focus:outline-none;
+    @apply focus:border-wine focus:bg-card focus:outline-none focus:shadow-[0_0_0_3px_color-mix(in_oklch,var(--primary),transparent_80%)];
     @apply aria-invalid:border-destructive;
   }
 
@@ -218,11 +225,21 @@
 
   /* The stacked page block visible under the open book. */
   .book-block {
+    /* Stacked leaves: page edges step out below and to both outer sides, so the open book
+       has thickness instead of reading as a flat bordered card. */
     box-shadow:
       0 1px 0 var(--book-edge),
       0 2px 0 var(--book-edge-2),
       0 3px 0 var(--book-edge),
       0 4px 0 var(--book-edge-3),
+      -1px 1px 0 var(--book-edge),
+      1px 1px 0 var(--book-edge),
+      -2px 2px 0 var(--book-edge-2),
+      2px 2px 0 var(--book-edge-2),
+      -3px 3px 0 var(--book-edge-3),
+      3px 3px 0 var(--book-edge-3),
+      -4px 4px 0 rgb(var(--shadow-ink) / 0.12),
+      4px 4px 0 rgb(var(--shadow-ink) / 0.12),
       0 24px 40px -18px rgb(var(--shadow-ink) / 0.45),
       0 8px 14px -10px rgb(var(--shadow-ink) / 0.3);
   }

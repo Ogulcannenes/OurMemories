@@ -2,12 +2,17 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 
-/** Email confirmation landing: supports both PKCE (`code`) and OTP (`token_hash`) links. */
+// Only the link types this app actually sends.
+const OTP_TYPES = new Set<EmailOtpType>(["signup", "email", "recovery", "email_change"]);
+
+/** Email link landing (sign-up confirmation and password reset): PKCE (`code`) and OTP (`token_hash`). */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType | null;
+  const rawType = searchParams.get("type");
+  const type = rawType && OTP_TYPES.has(rawType as EmailOtpType) ? (rawType as EmailOtpType) : null;
+  const reset = searchParams.get("next") === "reset" || type === "recovery";
   const supabase = await createClient();
 
   let ok = false;
@@ -18,5 +23,6 @@ export async function GET(request: NextRequest) {
   }
 
   // Fixed internal paths only — never redirect to a URL taken from the query string.
-  return NextResponse.redirect(new URL(ok ? "/onboarding" : "/login?error=confirm", origin));
+  const to = reset ? (ok ? "/auth/reset" : "/login?error=reset") : ok ? "/onboarding" : "/login?error=confirm";
+  return NextResponse.redirect(new URL(to, origin));
 }

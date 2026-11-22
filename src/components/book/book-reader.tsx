@@ -379,10 +379,10 @@ function Reader({
             ? "aspect-[1.42] w-[min(100%,72rem,calc((100dvh-17rem)*1.42))]"
             : "aspect-[0.7] w-[min(100%,30rem,calc((100dvh-16.5rem)*0.7))]",
         )}
-        style={{ perspective: spread ? 2600 : 1900 }}
+        style={{ perspective: spread ? 1700 : 1150 }}
       >
         {/* hard cover peeking out around the pages */}
-        <div aria-hidden className="absolute -inset-[0.6%] rounded-[5px] bg-book-cloth shadow-[0_28px_50px_-26px_rgba(64,52,47,0.75)]" />
+        <div aria-hidden className="absolute -inset-[1.4%] rounded-[5px] bg-book-cloth shadow-[0_28px_50px_-26px_rgba(64,52,47,0.75)]" />
         <div className="book-block absolute inset-0 rounded-[3px]">
           {spread ? (
             <SpreadView index={index} turn={turn} renderPage={renderPage} onDone={finishTurn} />
@@ -547,6 +547,23 @@ function Leaf({
   const toAngle = mode === "single" ? (dir === 1 ? -180 : 0) : dir === 1 ? -180 : 180;
   const rot = useMotionValue(fromAngle);
   const lift = useTransform(rot, (r) => Math.sin((Math.abs(r) * Math.PI) / 180)); // 0 flat → 1 upright
+  // The sheet rises toward the reader and bows slightly while upright, instead of turning as a
+  // rigid card: with the stronger perspective this reads as paper bending, not a page flattening.
+  const z = useTransform(lift, [0, 1], [0, mode === "single" ? 36 : 54]);
+  const bow = useTransform(lift, [0, 1], [1, 1.022]);
+
+  // Safety net: if the animation never reports completion (tab hidden mid-turn, interrupted
+  // frame loop), finish the turn anyway so the book can never get stuck between pages.
+  const done = useRef(false);
+  const finish = useCallback(() => {
+    if (done.current) return;
+    done.current = true;
+    onDone();
+  }, [onDone]);
+  useEffect(() => {
+    const id = setTimeout(finish, TURN_SECONDS * 1000 + 600);
+    return () => clearTimeout(id);
+  }, [finish]);
 
   const origin = mode === "single" ? "left center" : dir === 1 ? "left center" : "right center";
   const position = mode === "single" ? "inset-0" : dir === 1 ? "inset-y-0 left-1/2 w-1/2" : "inset-y-0 left-0 w-1/2";
@@ -560,10 +577,10 @@ function Leaf({
         aria-hidden
         inert
         className={cn("pointer-events-none absolute z-30", position)}
-        style={{ rotateY: rot, transformOrigin: origin, transformStyle: "preserve-3d" }}
+        style={{ rotateY: rot, z, scaleY: bow, transformOrigin: origin, transformStyle: "preserve-3d" }}
         animate={{ rotateY: toAngle }}
         transition={{ duration: TURN_SECONDS, ease: TURN_EASE }}
-        onAnimationComplete={onDone}
+        onAnimationComplete={finish}
       >
         <Face>
           {front}
@@ -590,22 +607,32 @@ function Face({ back, children }: { back?: boolean; children: React.ReactNode })
 }
 
 function Sheen({ lift, side }: { lift: MotionValue<number>; side: Side }) {
-  const opacity = useTransform(lift, [0, 1], [0, 0.45]);
+  const opacity = useTransform(lift, [0, 1], [0, 0.6]);
+  const curl = useTransform(lift, [0, 0.3, 1], [0, 0.55, 1]);
+  // "from" = the edge at the spine/hinge; the curl band sits at the free edge of the sheet.
+  const toFree = side === "left" ? "to left" : "to right";
   return (
-    <motion.span
-      className={cn(
-        "pointer-events-none absolute inset-0",
-        side === "left"
-          ? "bg-gradient-to-l from-[#40342f]/30 via-transparent to-white/25"
-          : "bg-gradient-to-r from-[#40342f]/30 via-transparent to-white/25",
-      )}
-      style={{ opacity }}
-    />
+    <>
+      <motion.span
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity,
+          background: `linear-gradient(${toFree}, rgba(64,52,47,0.38) 0%, rgba(64,52,47,0.08) 22%, transparent 45%, rgba(255,255,255,0.22) 78%, transparent 100%)`,
+        }}
+      />
+      <motion.span
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity: curl,
+          background: `linear-gradient(${toFree}, transparent 70%, rgba(255,255,255,0.28) 84%, rgba(64,52,47,0.22) 93%, rgba(64,52,47,0.42) 100%)`,
+        }}
+      />
+    </>
   );
 }
 
 function CastShadow({ lift, mode, dir }: { lift: MotionValue<number>; mode: "spread" | "single"; dir: 1 | -1 }) {
-  const opacity = useTransform(lift, [0, 1], [0, 0.18]);
+  const opacity = useTransform(lift, [0, 1], [0, 0.32]);
   const pos =
     mode === "single"
       ? "inset-0 bg-gradient-to-r from-[#40342f] to-transparent"

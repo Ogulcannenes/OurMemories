@@ -1,7 +1,7 @@
-// Цитатник service worker.
+// ADELYA service worker.
 // Private data is never cached: pages and API calls always go to the network.
 // Only immutable build assets are cached, plus an offline page for failed navigations.
-const CACHE = "tsitatnik-v1";
+const CACHE = "adelya-v2";
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {

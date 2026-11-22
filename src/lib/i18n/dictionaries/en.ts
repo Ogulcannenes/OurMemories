@@ -47,6 +47,15 @@ export const en = {
     checkEmail: "Almost there — open the link we sent to your email to confirm the account.",
     confirmFailed: "That confirmation link is invalid or has expired.",
     rateLimited: "Too many attempts. Please wait a minute and try again.",
+    forgot: "Forgot password?",
+    forgotTitle: "Reset password",
+    forgotHint: "Enter your email and we'll send a link to choose a new password.",
+    sendReset: "Send link",
+    resetSent: "If an account exists for this email, a reset link is on its way.",
+    newPasswordTitle: "Choose a new password",
+    newPassword: "New password",
+    savePassword: "Save password",
+    resetExpired: "That reset link is invalid or has expired. Request a new one.",
   },
   onboarding: {
     title: "Every book needs two authors",
@@ -158,6 +167,7 @@ export const en = {
   },
   memory: {
     favoriteToggle: "Favourite",
+    favoriteFailed: "Couldn't save. Try again.",
     writtenBy: "Written down by {name}",
     favorite: "Add to favourites",
     unfavorite: "Remove from favourites",

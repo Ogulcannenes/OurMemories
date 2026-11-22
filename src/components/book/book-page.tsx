@@ -325,7 +325,7 @@ export function EndPage({
         <Link
           href="/new"
           tabIndex={interactive ? undefined : -1}
-          className="mt-[5cqh] inline-flex min-h-11 items-center gap-2 rounded-sm bg-wine px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-[color-mix(in_oklch,var(--primary),black_12%)]"
+          className="mt-[5cqh] inline-flex min-h-11 items-center gap-2 rounded-sm bg-button px-5 text-sm font-semibold tracking-[0.02em] text-button-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(var(--shadow-ink)/0.22)] transition-colors hover:bg-[color-mix(in_oklch,var(--button),black_10%)]"
         >
           <PenLine className="size-4" aria-hidden />
           {t.reader.writeNext}

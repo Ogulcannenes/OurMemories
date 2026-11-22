@@ -88,7 +88,7 @@ export default async function HomePage() {
                   { n: stats.favorites, label: plural(locale, t.home.stats.favorites, stats.favorites).replace(/^\d+\s*/, "") },
                 ].map((s, i) => (
                   <div key={i} className="border-rule py-5 not-first:border-l not-first:pl-4 sm:not-first:pl-5">
-                    <dd className="font-display text-[2.5rem] leading-none font-medium tabular-nums lining-nums">{s.n}</dd>
+                    <dd className="font-display text-[2.75rem] leading-none font-normal italic tabular-nums lining-nums">{s.n}</dd>
                     <dt className="mt-2 text-xs leading-tight text-ink-soft">{s.label}</dt>
                   </div>
                 ))}

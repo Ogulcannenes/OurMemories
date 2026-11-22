@@ -140,7 +140,7 @@ export function BookFilters({
                 className={cn(
                   "inline-flex min-h-10 shrink-0 cursor-pointer items-center rounded-sm border px-3.5 text-[0.8125rem] font-medium whitespace-nowrap transition-colors",
                   active
-                    ? "border-wine bg-wine text-primary-foreground"
+                    ? "border-button bg-button text-button-foreground"
                     : "border-input text-ink-soft hover:border-ink/40 hover:text-ink",
                 )}
               >

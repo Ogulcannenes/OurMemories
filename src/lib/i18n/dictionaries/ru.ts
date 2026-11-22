@@ -47,6 +47,15 @@ export const ru: Dictionary = {
     checkEmail: "Почти готово — откройте ссылку из письма, чтобы подтвердить аккаунт.",
     confirmFailed: "Ссылка для подтверждения недействительна или устарела.",
     rateLimited: "Слишком много попыток. Подождите минуту и попробуйте снова.",
+    forgot: "Забыли пароль?",
+    forgotTitle: "Сброс пароля",
+    forgotHint: "Введите email — мы пришлём ссылку, чтобы задать новый пароль.",
+    sendReset: "Отправить ссылку",
+    resetSent: "Если аккаунт с этим email существует, ссылка уже в пути.",
+    newPasswordTitle: "Новый пароль",
+    newPassword: "Новый пароль",
+    savePassword: "Сохранить пароль",
+    resetExpired: "Ссылка недействительна или устарела. Запросите новую.",
   },
   onboarding: {
     title: "У каждой книги два автора",
@@ -163,6 +172,7 @@ export const ru: Dictionary = {
   },
   memory: {
     favoriteToggle: "В избранном",
+    favoriteFailed: "Не удалось сохранить. Попробуйте ещё раз.",
     writtenBy: "Записал(а) {name}",
     favorite: "Добавить в избранное",
     unfavorite: "Убрать из избранного",

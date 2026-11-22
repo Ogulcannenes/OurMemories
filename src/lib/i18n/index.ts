@@ -60,9 +60,14 @@ export function formatRelative(locale: Locale, isoDate: string, today = new Date
   const rtf = new Intl.RelativeTimeFormat(INTL_TAG[locale], { numeric: "auto" });
   const abs = Math.abs(days);
   if (abs < 7) return rtf.format(days, "day");
-  if (abs < 30) return rtf.format(Math.round(days / 7), "week");
-  if (abs < 365) return rtf.format(Math.round(days / 30), "month");
-  return rtf.format(Math.round(days / 365), "year");
+  if (abs < 30) return rtf.format(Math.sign(days) * Math.max(1, Math.floor(abs / 7)), "week");
+  // Whole calendar months, rounded toward zero (at least 1): 1 year 11 months ago is
+  // "last year", not "2 years ago"; exactly two years ago is "2 years ago".
+  const [later, earlier] = days < 0 ? [[today.getFullYear(), today.getMonth() + 1, today.getDate()], [y, m, d]] : [[y, m, d], [today.getFullYear(), today.getMonth() + 1, today.getDate()]];
+  const months = Math.max(1, (later[0] - earlier[0]) * 12 + (later[1] - earlier[1]) - (later[2] < earlier[2] ? 1 : 0));
+  const sign = Math.sign(days);
+  if (months < 12) return rtf.format(sign * months, "month");
+  return rtf.format(sign * Math.floor(months / 12), "year");
 }
 
 /** Built-in categories are stored by key and translated; custom ones keep the name the couple gave them. */

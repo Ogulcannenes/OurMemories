@@ -74,6 +74,37 @@ export async function signUp(_: ActionState, form: FormData): Promise<ActionStat
   redirect("/onboarding");
 }
 
+/** Sends a password-reset link. Always answers the same way so it never reveals which emails exist. */
+export async function requestPasswordReset(_: ActionState, form: FormData): Promise<ActionState> {
+  const { t } = await getI18n();
+  const email = String(form.get("email") ?? "").trim().toLowerCase();
+  if (!z.email().max(254).safeParse(email).success) return { fieldErrors: { email: t.auth.invalidEmail } };
+
+  const origin = (await headers()).get("origin");
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: origin ? `${origin}/auth/confirm?next=reset` : undefined,
+  });
+  if (error?.code === "over_email_send_rate_limit" || error?.code === "over_request_rate_limit") {
+    return { error: t.auth.rateLimited };
+  }
+  return { ok: true, message: t.auth.resetSent };
+}
+
+/** Sets a new password for the recovery session opened by the reset link. */
+export async function updatePassword(_: ActionState, form: FormData): Promise<ActionState> {
+  const { t } = await getI18n();
+  const password = String(form.get("password") ?? "");
+  if (password.length < 8 || password.length > 200) return { fieldErrors: { password: t.auth.weakPassword } };
+
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+  if (!data?.claims?.sub) return { error: t.auth.resetExpired };
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: authError(t, error.code) };
+  redirect("/");
+}
+
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

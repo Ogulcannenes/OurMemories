@@ -18,19 +18,23 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       {/* The cover: burgundy book-cloth with a blind-embossed frame */}
       <section className="relative overflow-hidden bg-book-cloth text-[#f8f5ef]">
         <span aria-hidden className="cover-cloth absolute inset-0" />
-        <span aria-hidden className="absolute inset-3 rounded-[2px] border border-[#f8f5ef]/20 sm:inset-5 lg:inset-8" />
-        <span aria-hidden className="absolute inset-4 rounded-[1px] border border-[#f8f5ef]/10 sm:inset-6 lg:inset-10" />
+        <span aria-hidden className="absolute inset-3 rounded-[2px] border border-[#d9bf94]/35 sm:inset-5 lg:inset-8" />
+        <span aria-hidden className="absolute inset-4 rounded-[1px] border border-[#d9bf94]/15 sm:inset-6 lg:inset-10" />
 
         <div className="relative flex h-full flex-col px-8 pt-8 pb-10 sm:px-12 lg:px-20 lg:py-16">
           <div className="flex justify-end lg:hidden">
-            <LocaleSwitcher className="[&_button[aria-pressed=false]]:text-[#f8f5ef]/75 [&_button[aria-pressed=false]:hover]:bg-white/10 [&_button[aria-pressed=false]:hover]:text-[#f8f5ef] [&_button[aria-pressed=true]]:bg-[#f8f5ef] [&_button[aria-pressed=true]]:text-ink" />
+            <LocaleSwitcher className="[&_button[aria-pressed=false]]:text-[#f8f5ef]/75 [&_button[aria-pressed=false]:hover]:bg-white/10 [&_button[aria-pressed=false]:hover]:text-[#f8f5ef] [&_button[aria-pressed=true]]:bg-[#f8f5ef] [&_button[aria-pressed=true]]:text-[#2b211d]" />
           </div>
 
           <div className="flex flex-1 flex-col justify-center py-8 lg:py-0">
-            <h1 className="font-display text-[2.9rem] leading-none font-medium tracking-[0.28em] text-[#f8f5ef] [text-shadow:0_1px_0_rgba(0,0,0,0.25)] sm:text-[3.8rem] lg:text-[5rem]">
+            <h1 className="font-display text-[2.9rem] leading-none font-medium tracking-[0.28em] bg-[linear-gradient(180deg,#f6ead2_0%,#e2c99c_45%,#c7a772_70%,#e9d6b0_100%)] bg-clip-text text-transparent [filter:drop-shadow(0_1px_0_rgba(0,0,0,0.3))] sm:text-[3.8rem] lg:text-[5rem]">
               {BRAND}
             </h1>
-            <span aria-hidden className="mt-6 h-px w-14 bg-[#e9d5d2]/60 lg:mt-8" />
+            <span aria-hidden className="mt-6 flex items-center gap-2 text-[#d9bf94]/80 lg:mt-8">
+              <span className="h-px w-8 bg-current" />
+              <span className="size-1 rotate-45 bg-current" />
+              <span className="h-px w-8 bg-current" />
+            </span>
             <p className="mt-6 font-display text-[1.35rem] leading-snug text-[#f8f5ef]/95 italic sm:text-2xl lg:mt-8 lg:text-[1.9rem]">
               {SLOGAN}
             </p>
@@ -45,7 +49,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           <LocaleSwitcher />
         </div>
         <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
-          <LoginForm confirmFailed={error === "confirm"} />
+          <LoginForm linkError={error === "confirm" || error === "reset" ? error : undefined} />
         </div>
       </section>
     </main>

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { getAppContext } from "@/lib/data/context";
 import { listTagNames } from "@/lib/data/memories";
 import { categoryLabel } from "@/lib/i18n";
@@ -16,8 +18,15 @@ export default async function NewMemoryPage() {
   const tags = await listTagNames(ctx);
 
   return (
-    <div className="page max-w-2xl pt-8 sm:pt-12">
-      <header className="mb-10">
+    <div className="page max-w-2xl pt-6 sm:pt-10">
+      <Link
+        href="/book"
+        className="-ml-2 inline-flex min-h-11 items-center gap-2 rounded-sm px-2 text-sm font-medium text-ink-soft hover:text-ink"
+      >
+        <ArrowLeft className="size-4" aria-hidden />
+        {t.common.back}
+      </Link>
+      <header className="mt-6 mb-10">
         <h1 className="font-display text-[2.75rem] leading-none font-medium tracking-tight sm:text-[3.25rem]">
           {t.form.newTitle}
         </h1>

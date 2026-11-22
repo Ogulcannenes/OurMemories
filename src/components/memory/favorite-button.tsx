@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
+import { useEffect, useOptimistic, useRef, useState, useTransition } from "react";
 import { Bookmark } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { setFavorite } from "@/lib/actions/memories";
@@ -27,24 +27,47 @@ export function FavoriteButton({
   const [on, setOn] = useOptimistic(initial);
   const label = t.memory.favoriteToggle;
 
+  const [failed, setFailed] = useState(false);
+  const failTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(failTimer.current), []);
+
   const toggle = () => {
     if (pending) return; // aria-disabled, not disabled: keeps keyboard focus on the button
     const next = !on;
+    setFailed(false);
     start(async () => {
       setOn(next);
+      let ok = false;
       try {
-        await setFavorite(memoryId, next); // on failure the optimistic state simply falls back
+        ok = Boolean((await setFavorite(memoryId, next))?.ok);
       } catch {
-        /* network / server error: keep the book usable, state reverts */
+        /* network / server error */
+      }
+      // The optimistic state falls back by itself; say why instead of silently undoing the tap.
+      if (!ok) {
+        setFailed(true);
+        clearTimeout(failTimer.current);
+        failTimer.current = setTimeout(() => setFailed(false), 3500);
       }
     });
   };
+
+  const failure = (
+    <span role="status" className="pointer-events-none absolute top-full right-0 z-20 mt-1 w-max max-w-48 text-right">
+      {failed && (
+        <span className="inline-block rounded-sm bg-ink px-2 py-1 text-xs font-medium text-paper shadow-md">
+          {t.memory.favoriteFailed}
+        </span>
+      )}
+    </span>
+  );
 
   const focusRing =
     "outline-none focus-visible:ring-2 focus-visible:ring-wine focus-visible:ring-offset-2 focus-visible:ring-offset-card";
 
   if (variant === "ribbon") {
     return (
+      <span className="relative inline-flex">
       <button
         type="button"
         onClick={toggle}
@@ -70,10 +93,13 @@ export function FavoriteButton({
           />
         )}
       </button>
+      {failure}
+      </span>
     );
   }
 
   return (
+    <span className="relative inline-flex">
     <button
       type="button"
       onClick={toggle}
@@ -97,5 +123,7 @@ export function FavoriteButton({
         <Bookmark className={cn("size-[1.1rem]", on && "fill-wine")} aria-hidden />
       </motion.span>
     </button>
+    {failure}
+    </span>
   );
 }

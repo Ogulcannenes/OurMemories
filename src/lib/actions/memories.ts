@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getAppContext } from "@/lib/data/context";
 import { getMemory, isUuid, type Memory } from "@/lib/data/memories";
 import { PHOTO_BUCKET } from "@/lib/env";
+import { mergeEditedPhotos } from "@/lib/memory-photos";
 import { fmt } from "@/lib/i18n";
 import type { ActionState } from "./state";
 
@@ -83,6 +84,13 @@ export async function saveMemory(_: ActionState, form: FormData): Promise<Action
       return { error: t.memory.notFoundBody };
     }
     previous = existing.memory_photos.map((p) => p.path);
+    const merged = mergeEditedPhotos(previous, form.getAll("shown_photos").map(String), d.photos);
+    if (merged.photos.length > LIMITS.photos) {
+      await removeFresh();
+      // `error` (not fieldErrors) so the form knows its uploads were removed and re-uploads.
+      return { error: fmt(t.form.photosMax, { max: LIMITS.photos }) };
+    }
+    d.photos = merged.photos;
     const { error } = await ctx.supabase.from("memories").update(values).eq("id", id);
     if (error) {
       await removeFresh();
